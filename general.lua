@@ -208,6 +208,25 @@ function General()
   end
 
   --start moving if out of los
+  if UnitExists(lowest) == 1 
+  and UnitIsDead(lowest) == nil
+  and UnitIsConnected(lowest) == 1
+  and lowest ~= "player"
+  and not _LoS(lowest)
+  and not _LoS("party1", "party2") 
+  then
+
+    if MoveToObject(lowest) ~= nil then
+      local X, Y, Z = MoveToObject(lowest)
+      MoveTo (X, Y, Z, true)
+    end
+
+    if MoveToObject(lowest) == nil then
+      stayinlos(lowest, "player")
+    end
+
+  end
+
   if UnitExists("party1") == 1 
   and UnitIsDead("party1") == nil
   and UnitIsConnected("party1") == 1
@@ -240,25 +259,6 @@ function General()
 
     if MoveToObject("party2") == nil then
       stayinlos("party2", "player")
-    end
-
-  end
-
-  if UnitExists(lowest) == 1 
-  and UnitIsDead(lowest) == nil
-  and UnitIsConnected(lowest) == 1
-  and lowest ~= "player"
-  and not _LoS(lowest)
-  and not _LoS("party1", "party2") 
-  then
-
-    if MoveToObject(lowest) ~= nil then
-      local X, Y, Z = MoveToObject(lowest)
-      MoveTo (X, Y, Z, true)
-    end
-
-    if MoveToObject(lowest) == nil then
-      stayinlos(lowest, "player")
     end
 
   end
