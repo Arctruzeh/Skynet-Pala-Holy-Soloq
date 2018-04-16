@@ -38,6 +38,10 @@ function getHp(unit)
   end
 end
 
+function realHp(unit) 
+  return 100 * UnitHealth(unit) / UnitHealthMax(unit)
+end
+
 function cdRemains(spellid)
   if select(2,GetSpellCooldown(spellid)) + (select(1,GetSpellCooldown(spellid)) - GetTime()) > 0
   then return select(2,GetSpellCooldown(spellid)) + (select(1,GetSpellCooldown(spellid)) - GetTime())

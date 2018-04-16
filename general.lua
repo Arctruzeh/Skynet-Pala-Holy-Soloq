@@ -10,7 +10,14 @@ function General()
     local status, mapName, instanceID, bracketMin, bracketMax, teamSize, registeredMatch = GetBattlefieldStatus(1)
     if status ~= "queued"
     and status ~= "confirm" then
-      RunMacroText("/say .arenaq solo")
+      if GetRealmName() == "Erenia - Inst80 Arena" then
+        RunMacroText("/say .arenaq solo")
+      end
+      if GetRealmName() == "Blackrock [PvP only]" then
+        TargetUnit("3vs3 Solo Queue")
+        InteractUnit("target")
+        RunMacroText("/click GossipTitleButton1")
+      end
     end
   end
 
@@ -208,21 +215,42 @@ function General()
   end
 
   --start moving if out of los
-  if UnitExists(lowest) == 1 
-  and UnitIsDead(lowest) == nil
-  and UnitIsConnected(lowest) == 1
-  and lowest ~= "player"
-  and not _LoS(lowest)
+  if UnitExists("party1") == 1 
+  and UnitIsDead("party1") == nil
+  and UnitIsConnected("party1") == 1
+  and not _LoS("party1")
   and not _LoS("party1", "party2") 
+  and realHp("party1") < realHp("player")
+  and realHp("party1") < realHp("party2")
   then
 
-    if MoveToObject(lowest) ~= nil then
-      local X, Y, Z = MoveToObject(lowest)
+    if MoveToObject("party1") ~= nil then
+      local X, Y, Z = MoveToObject("party1")
       MoveTo (X, Y, Z, true)
     end
 
-    if MoveToObject(lowest) == nil then
-      stayinlos(lowest, "player")
+    if MoveToObject("party1") == nil then
+      stayinlos("party1", "player")
+    end
+
+  end
+
+  if UnitExists("party2") == 1 
+  and UnitIsDead("party2") == nil
+  and UnitIsConnected("party2") == 1
+  and not _LoS("party2")
+  and not _LoS("party1", "party2") 
+  and realHp("party2") < realHp("player")
+  and realHp("party2") < realHp("party1")
+  then
+
+    if MoveToObject("party2") ~= nil then
+      local X, Y, Z = MoveToObject("party2")
+      MoveTo (X, Y, Z, true)
+    end
+
+    if MoveToObject("party2") == nil then
+      stayinlos("party2", "player")
     end
 
   end
